@@ -1,4 +1,4 @@
-source("~/DrugResponse/pathway_analysis/preRankedTest.R")
+source("~/Sage-Analysis-Pipeline/PathwayAnalysis/preRankedTest.R")
 #require(ggplot2)
 myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",                                 
                                   fields=c("gseaResult","fetResult"),
