@@ -6,7 +6,7 @@ source("~/Sage-Analysis-Pipeline/PathwayAnalysis/myPathwayAnalysis.R")
 pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
   if(is.null(synID)==1){
-    error("Please select which database you would like to use in your analysis: MSigDB(syn1681370) or Graphite(under construction)")
+    error("Please select which database you would like to use in your analysis: MSigDB(syn1681370) or Graphite(syn2135025)")
     break;
   }
   if(is.null(pathwayName)==1){
@@ -42,20 +42,20 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       allPathways <- MSIGDB$objects$C5.GO_MF
     }
   }
-  if(synID == "xxx"){
-    GRAPHITE<-synGet("xxx",load = T)
+  if(synID == "syn2135029"){
+    GRAPHITE<-synGet("syn2135029",load = T)
     
     if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- GRAPHITE$objects$BIOCARTA
+      allPathways <- GRAPHITE@objects$BIOCARTA
     }
     if(is.element(pathwayName,"KEGG")){
-      allPathways <- GRAPHITE$objects$KEGG
+      allPathways <- GRAPHITE@objects$KEGG
     }
     if(is.element(pathwayName,"REACTOME")){
-      allPathways <- GRAPHITE$objects$REACTOME
+      allPathways <- GRAPHITE@objects$REACTOME
     }
     if(is.element(pathwayName,"NCI")){
-      allPathways <- GRAPHITE$objects$NCI
+      allPathways <- GRAPHITE@objects$NCI
     }    
   }
     
