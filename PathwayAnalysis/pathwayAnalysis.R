@@ -1,9 +1,9 @@
 # work flow or Demo using MSigDB or Graphite DB
 require(synapseClient)
-library(multicore)
+require(multicore)
 source("~/Sage-Analysis-Pipeline/PathwayAnalysis/myPathwayAnalysis.R")
-# pathwayAnalysisFuctions for bootstrapping and nonbootstrapping
-pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA")){
+
+pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
   if(is.null(synID)==1){
     error("Please select which database you would like to use in your analysis: MSigDB(syn1681370) or Graphite(under construction)")
@@ -74,7 +74,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       pathwayAnalysis$fet(AllGenes,curPathwayGenes,testSet)
       return(pathwayAnalysis)      
     }    
-    results<-mclapply(1:length(allPathways), function(x)pathwayTest(x))     
+    results<-mclapply(1:length(allPathways), function(x)pathwayTest(x),mc.cores= cores)     
     
   }else{ # GSEA test
     referenceSet<-sort(Reference, decreasing =T, index.return =T)
@@ -84,7 +84,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       pathwayAnalysis$gsea(referenceSet$x,curPathwayGenes,np=1000,w =1)
       return(pathwayAnalysis)      
     }     
-    results<-mclapply(1:length(allPathways), function(x)pathwayTest(x))               
+    results<-mclapply(1:length(allPathways), function(x)pathwayTest(x),mc.cores= cores)               
   }
   
   names(results)<-names(allPathways)  

@@ -109,7 +109,7 @@ preRankedTest <- function(reference,geneset,np=1000,w=1){
   }
   
   #return(list(es_all = es_all, es = es,nes = nes,p.value = pv,hit = isInGeneset,reference = sortRef, geneset = geneset))
-#   return(list(es_all = es_all, es = es,nes = nes,p.value = pv,hit = isInGeneset, geneset = geneset))
-  return(list(es = es,nes = nes,p.value = pv))
+  return(list(es = es,nes = nes,p.value = pv, geneset = geneset))
+#   return(list(es = es,nes = nes,p.value = pv))
   
 }
