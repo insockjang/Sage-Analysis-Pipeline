@@ -1,7 +1,13 @@
 Sage-Analysis-Pipeline
 ======================
-This is one of Sage analytical pipelines for pathway analysis.
-GSEA codes are added
-Graphite
-MSigDB
-Later, pathway Topological analysis will be added
+This is one of Sage analytical pipelines for drug mechanism discovery. 
+
+A. Drug target rank discovery 
+  Check if data driven model (feature selection) captures known target of drug well
+
+B. Pathway analysis with GSEA or FET codes
+    Two pathway databases in Broad Institute and Bioconductor 
+  1. MSigDB (without interaction information but high fidelity)
+  2. Graphite (with interaction information but low fidelity)
+
+C. Pathway Topology analysis will be considered
