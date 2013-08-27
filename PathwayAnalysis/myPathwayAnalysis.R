@@ -53,6 +53,7 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       ind<-1:N                                     
                                       
                                       pos.max.ES<-which.max(es_all)
+                                      neg.max.ES<-which.min(es_all)
                                       
                                       min.RES <- min(es_all)
                                       max.RES <- max(es_all)
@@ -84,7 +85,11 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       }
                                       
                                       lines(c(1, N), c(0, 0), lwd = 1, lty = 2, cex = 1, col = 1) # zero RES line
-                                      lines(c(pos.max.ES, pos.max.ES), c(min.plot, max.plot), lwd = 1, lty = 3, cex = 1, col = col) # max enrichment vertical line
+                                      if(abs(max.RES)>abs(min.RES)){
+                                        lines(c(pos.max.ES, pos.max.ES), c(min.plot, max.plot), lwd = 1, lty = 3, cex = 1, col = col) # max enrichment vertical line
+                                      }else{
+                                        lines(c(neg.max.ES, neg.max.ES), c(min.plot, max.plot), lwd = 1, lty = 3, cex = 1, col = col) # max enrichment vertical line
+                                      }
                                       for (j in 1:N) {
                                         if (isInGeneset[j] == 1) {
                                           lines(c(j, j), c(min.plot + 1.25*delta, min.plot + 1.75*delta), lwd = 1, lty = 1, cex = 1, col = 1)  # enrichment tags

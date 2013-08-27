@@ -21,7 +21,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   pathwayName = toupper(pathwayName)
   
   if(synID == "syn1681370"){
-    MSIGDB<-synGet("syn1681370",load = T)
+    MSIGDB<-synGet("syn1681370",load = TRUE)
     
     if(is.element(pathwayName,"BIOCARTA")){
       allPathways <- MSIGDB$objects$C2.CP.BIOCARTA
@@ -43,7 +43,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     }
   }
   if(synID == "syn2135029"){
-    GRAPHITE<-synGet("syn2135029",load = T)
+    GRAPHITE<-synGet("syn2135029",load = TRUE)
     
     if(is.element(pathwayName,"BIOCARTA")){
       allPathways <- GRAPHITE@objects$BIOCARTA
@@ -77,7 +77,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     results<-mclapply(1:length(allPathways), function(x)pathwayTest(x),mc.cores= cores)     
     
   }else{ # GSEA test
-    referenceSet<-sort(Reference, decreasing =T, index.return =T)
+    referenceSet<-sort(Reference, decreasing =TRUE, index.return =TRUE)
     pathwayTest <-function(x){    
       curPathwayGenes <- allPathways[[x]]        
       pathwayAnalysis<-myPathwayAnalysis$new()
