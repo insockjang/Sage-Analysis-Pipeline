@@ -21,25 +21,26 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   pathwayName = toupper(pathwayName)
   
   if(synID == "syn1681370"){
-    MSIGDB<-synGet("syn1681370",load = TRUE)
+    MSIGDB<-synGet("syn2227979")
+    load(MSIGDB@filePath)
     
     if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- MSIGDB$objects$C2.CP.BIOCARTA
+      allPathways <- MSigDB$C2.CP.BIOCARTA
     }
     if(is.element(pathwayName,"KEGG")){
-      allPathways <- MSIGDB$objects$C2.CP.KEGG
+      allPathways <- MSigDB$C2.CP.KEGG
     }
     if(is.element(pathwayName,"REACTOME")){
-      allPathways <- MSIGDB$objects$C2.CP.REACTOME
+      allPathways <- MSigDB$C2.CP.REACTOME
     }
     if(is.element(pathwayName,"GO_BP")){
-      allPathways <- MSIGDB$objects$C5.GO_BP
+      allPathways <- MSigDB$C5.GO_BP
     }
     if(is.element(pathwayName,"GO_CC")){
-      allPathways <- MSIGDB$objects$C5.GO_CC
+      allPathways <- MSigDB$C5.GO_CC
     }
     if(is.element(pathwayName,"GO_MF")){
-      allPathways <- MSIGDB$objects$C5.GO_MF
+      allPathways <- MSigDB$C5.GO_MF
     }
   }
   if(synID == "syn2135029"){
