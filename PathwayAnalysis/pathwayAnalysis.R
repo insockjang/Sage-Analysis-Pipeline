@@ -1,7 +1,7 @@
 # work flow or Demo using MSigDB or Graphite DB
 require(synapseClient)
-require(multicore)
-source("~/Sage-Analysis-Pipeline/PathwayAnalysis/myPathwayAnalysis.R")
+require(parallel)
+source("PathwayAnalysis/myPathwayAnalysis.R")
 
 pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
