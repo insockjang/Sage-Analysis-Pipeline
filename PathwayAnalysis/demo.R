@@ -1,9 +1,9 @@
-source("~/Sage-Analysis-Pipeline/PathwayAnalysis/pathwayAnalysis.R")
+source("PathwayAnalysis/pathwayAnalysis.R")
 
 pathway.type = c("KEGG","Biocarta","Reactome","GO_BP","GO_CC","GO_MF")
 
 # preparation : myReference list for GSEA
-A<-read.table("~/Sage-Analysis-Pipeline/PathwayAnalysis/reference_demo.txt")
+A<-read.table("PathwayAnalysis/reference_demo.txt")
 myReference<-A[,2]
 names(myReference)<-A[,1]
 
@@ -12,13 +12,16 @@ B<-sample(names(myReference),300)
 
 # MSigDB (synID="syn2135029" for GraphiteDB)
 # run test with multicore with FET (fisher exact test)
-results.fet<-pathwayAnalysis(synID="syn1681370",pathwayName = "KEGG",Reference = B,Test.method = "FET",cores = 8)
+results.fet<-pathwayAnalysis(synID="syn1681370",pathwayName = "KEGG",Reference = B,Test.method = "FET",cores = 2)
 
 # combine all p-value from FET
 Pval.fet<-c()
 for(k in 1:length(results.fet)){
   Pval.fet<-c(Pval.fet,results.fet[[k]]$fetResult$p.value)
 }
+Pval.fet <- p.adjust(Pval.fet,"BH")
+data.frame(geneset = names(results.fet), pvalue = Pval.fet)
+
 names(Pval.fet)<-names(results.fet)
 
 
@@ -30,6 +33,9 @@ Pval<-c()
 for(k in 1:length(results)){
   Pval<-c(Pval,results[[k]]$gseaResult$p.value)
 }
+Pval <- p.adjust(Pval,"BH")
+data.frame(geneset = names(results), pvalue = Pval)
+
 names(Pval)<-names(results)
 
 

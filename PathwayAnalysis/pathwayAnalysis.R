@@ -1,7 +1,7 @@
 # work flow or Demo using MSigDB or Graphite DB
 require(synapseClient)
 require(parallel)
-source("PathwayAnalysis/myPathwayAnalysis.R")
+source("/home/isjang/Code/Sage-Analysis-Pipeline/PathwayAnalysis/myPathwayAnalysis.R")
 
 pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
@@ -21,26 +21,26 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   pathwayName = toupper(pathwayName)
   
   if(synID == "syn1681370"){
-    MSIGDB<-synGet("syn2227979")
-    load(MSIGDB@filePath)
+    # MSIGDB<-synGet("syn2227979")
+    load("/gpfs/archive/RED/isjang/msigdb_v6.0_files_to_download_locally/MSigDBv6.Rdata")
     
     if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- MSigDB$C2.CP.BIOCARTA
+      allPathways <- MSigDB$C2.CP.BIOCARTA$genesets
     }
     if(is.element(pathwayName,"KEGG")){
-      allPathways <- MSigDB$C2.CP.KEGG
+      allPathways <- MSigDB$C2.CP.KEGG$genesets
     }
     if(is.element(pathwayName,"REACTOME")){
-      allPathways <- MSigDB$C2.CP.REACTOME
+      allPathways <- MSigDB$C2.CP.REACTOME$genesets
     }
     if(is.element(pathwayName,"GO_BP")){
-      allPathways <- MSigDB$C5.GO_BP
+      allPathways <- MSigDB$C5.GO_BP$genesets
     }
     if(is.element(pathwayName,"GO_CC")){
-      allPathways <- MSigDB$C5.GO_CC
+      allPathways <- MSigDB$C5.GO_CC$genesets
     }
     if(is.element(pathwayName,"GO_MF")){
-      allPathways <- MSigDB$C5.GO_MF
+      allPathways <- MSigDB$C5.GO_MF$genesets
     }
   }
   if(synID == "syn2135029"){
