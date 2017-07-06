@@ -34,13 +34,13 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       allPathways <- MSigDB$C2.CP.REACTOME$genesets
     }
     if(is.element(pathwayName,"GO_BP")){
-      allPathways <- MSigDB$C5.GO_BP$genesets
+      allPathways <- MSigDB$C5.BP$genesets
     }
     if(is.element(pathwayName,"GO_CC")){
-      allPathways <- MSigDB$C5.GO_CC$genesets
+      allPathways <- MSigDB$C5.CC$genesets
     }
     if(is.element(pathwayName,"GO_MF")){
-      allPathways <- MSigDB$C5.GO_MF$genesets
+      allPathways <- MSigDB$C5.MF$genesets
     }
   }
   if(synID == "syn2135029"){
