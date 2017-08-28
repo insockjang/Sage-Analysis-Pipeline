@@ -68,7 +68,7 @@ preRankedTest <- function(reference,geneset,np=1000,w=1){
     ixpk <- which(es_all==max(es_all))
     isen[1:ixpk] <- 1
   }
-  ledge <- sortRef$x[(isen==1)&(isInGeneset==1)];
+  ledge <- names(reference[(isen==1)&(isInGeneset==1)])
   
   # compute norminal p-value
   if (np>0) { 
