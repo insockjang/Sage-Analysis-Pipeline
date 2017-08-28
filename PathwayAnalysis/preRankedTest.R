@@ -60,17 +60,15 @@ preRankedTest <- function(reference,geneset,np=1000,w=1){
   #plot(1:length(es_all), es_all, type="l")
   
   # identify leading edge
-  #isen <- mat.or.vec(length(es_all),1)
-  #if (es < 0){
-  #  ixpk <- which(es_all==min(es_all))
-  #  isen[ixpk:length(isen)] <- 1
-  #}
-  #else{
-  #  ixpk <- which(es_all==max(es_all))
-  #  isen[1:ixpk] <- 1
-  #}
-  
-  #ledge <- sortRef$x[(isen==1)&(isInGeneset==1)];
+  isen <- mat.or.vec(length(es_all),1)
+  if (es < 0){
+    ixpk <- which(es_all==min(es_all))
+    isen[ixpk:length(isen)] <- 1
+  }else{
+    ixpk <- which(es_all==max(es_all))
+    isen[1:ixpk] <- 1
+  }
+  ledge <- sortRef$x[(isen==1)&(isInGeneset==1)];
   
   # compute norminal p-value
   if (np>0) { 
@@ -109,7 +107,7 @@ preRankedTest <- function(reference,geneset,np=1000,w=1){
   }
   
   #return(list(es_all = es_all, es = es,nes = nes,p.value = pv,hit = isInGeneset,reference = sortRef, geneset = geneset))
-  return(list(es = es,nes = nes,p.value = pv, geneset = geneset))
+  return(list(es = es,nes = nes,p.value = pv, geneset = geneset, leadEdge = ledge))
 #   return(list(es = es,nes = nes,p.value = pv))
   
 }

@@ -42,6 +42,9 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     if(is.element(pathwayName,"GO_MF")){
       allPathways <- MSigDB$C5.MF$genesets
     }
+    if(is.element(pathwayName,"HALLMARK")){
+      allPathways <- MSigDB$H.ALL$genesets
+    }
   }
   if(synID == "syn2135029"){
     GRAPHITE<-synGet("syn2135029",load = TRUE)

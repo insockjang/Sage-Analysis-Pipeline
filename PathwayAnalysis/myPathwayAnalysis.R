@@ -23,7 +23,7 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       
                                       .self$fetResult<-fisher.test(Mat2x2)                               
                                     },
-                                    gseaPlot = function(reference,geneSet){
+                                    gseaPlot = function(reference,geneSet,...){
                                       reference1 <- sort(reference,decreasing = TRUE, index.return = TRUE)
                                       reference <- reference1$x
                                       geneset <- intersect(geneSet, names(reference))                                      
