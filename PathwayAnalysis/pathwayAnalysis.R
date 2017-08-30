@@ -20,9 +20,9 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   
   pathwayName = toupper(pathwayName)
   
-  if(synID == "syn1681370"){
+  if(toupper(synID) == "MSIGDB"){
     # MSIGDB<-synGet("syn2227979")
-    load("/gpfs/archive/RED/isjang/msigdb_v6.0_files_to_download_locally/MSigDBv6.Rdata")
+    load("/gpfs/archive/RED/isjang/PathwayDB/MSigDBv6.Rdata")
     
     if(is.element(pathwayName,"BIOCARTA")){
       allPathways <- MSigDB$C2.CP.BIOCARTA$genesets
@@ -46,21 +46,37 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       allPathways <- MSigDB$H.ALL$genesets
     }
   }
-  if(synID == "syn2135029"){
-    GRAPHITE<-synGet("syn2135029",load = TRUE)
+  if(toupper(synID) == "GRAPHITE"){
+    
+    curateDB <- function(DB){
+      db <- vector("list",length(DB))
+      for(k in 1:length(DB)){
+        db[[k]]<-nodes(DB[[k]])
+      }
+      names(db) <- names(DB)
+      return(db)
+    }
+    
+    load("/gpfs/archive/RED/isjang/PathwayDB/Graphite.Rdata")
     
     if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- GRAPHITE@objects$BIOCARTA
+      allPathways <- curateDB(GRAPHITE$BIOCARTA@entries)
     }
     if(is.element(pathwayName,"KEGG")){
-      allPathways <- GRAPHITE@objects$KEGG
+      allPathways <- curateDB(GRAPHITE$KEGG@entries)
     }
     if(is.element(pathwayName,"REACTOME")){
-      allPathways <- GRAPHITE@objects$REACTOME
+      allPathways <- curateDB(GRAPHITE$REACTOME@entries)
     }
     if(is.element(pathwayName,"NCI")){
-      allPathways <- GRAPHITE@objects$NCI
-    }    
+      allPathways <- curateDB(GRAPHITE$NCI@entries)
+    }
+    if(is.element(pathwayName,"HUMANCYC")){
+      allPathways <- curateDB(GRAPHITE$HUMANCYC@entries)
+    }
+    if(is.element(pathwayName,"PANTHER")){
+      allPathways <- curateDB(GRAPHITE$PANTHER@entries)
+    }
   }
     
   # FET test
