@@ -23,7 +23,8 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   
   if(toupper(synID) == "MSIGDB"){
     
-    load("/gpfs/archive/RED/isjang/PathwayDB/MSigDBv6.Rdata")
+    githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/MSigDBv6.Rdata"
+    load(url(githubURL))
     
     if(is.element(pathwayName,"BIOCARTA")){
       allPathways <- MSigDB$C2.CP.BIOCARTA$genesets
@@ -58,7 +59,9 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
       return(db)
     }
     
-    load("/gpfs/archive/RED/isjang/PathwayDB/Graphite.Rdata")
+    
+    githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/Graphite.Rdata"
+    load(url(githubURL))
     
     if(is.element(pathwayName,"BIOCARTA")){
       allPathways <- curateDB(GRAPHITE$BIOCARTA@entries)
