@@ -1,7 +1,8 @@
 # work flow or Demo using MSigDB or Graphite DB
-require(synapseClient)
-require(parallel)
-source("/home/isjang/Code/Sage-Analysis-Pipeline/PathwayAnalysis/myPathwayAnalysis.R")
+require(graphite)
+require(doParallel)
+require(devtools)
+source_url("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/myPathwayAnalysis.R")
 
 pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
@@ -21,7 +22,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   pathwayName = toupper(pathwayName)
   
   if(toupper(synID) == "MSIGDB"){
-    # MSIGDB<-synGet("syn2227979")
+    
     load("/gpfs/archive/RED/isjang/PathwayDB/MSigDBv6.Rdata")
     
     if(is.element(pathwayName,"BIOCARTA")){
@@ -101,7 +102,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     pathwayTest <-function(x){    
       curPathwayGenes <- allPathways[[x]]        
       pathwayAnalysis<-myPathwayAnalysis$new()
-      pathwayAnalysis$gsea(referenceSet$x,curPathwayGenes,np=1000,w =1)
+      pathwayAnalysis$gsea(referenceSet$x,curPathwayGenes,np=10000,w =1)
       return(pathwayAnalysis)      
     }     
     results<-mclapply(1:length(allPathways), function(x)pathwayTest(x),mc.cores= cores)               

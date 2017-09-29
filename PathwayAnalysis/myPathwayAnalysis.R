@@ -1,5 +1,6 @@
-source("/home/isjang/Code/Sage-Analysis-Pipeline/PathwayAnalysis/preRankedTest.R")
-#require(ggplot2)
+require(devtools)
+source_url("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/preRankedTest.R")
+
 myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",                                 
                                   fields=c("gseaResult","fetResult"),
                                   methods = list(
