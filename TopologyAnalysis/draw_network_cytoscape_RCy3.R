@@ -103,5 +103,5 @@ drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5)
   # edgeData(cw@graph)
   # 
   
-  
+  return(cw)
 }
