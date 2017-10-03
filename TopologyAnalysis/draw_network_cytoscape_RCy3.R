@@ -1,0 +1,107 @@
+require(devtools)
+githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/reactome_similarity.Rdata"
+load(url(githubURL))
+
+
+# NODE <- reactome geneset names 
+# size <- reactome geneset size 
+# nes <- reactome geneset's gsea significance score 
+# drawCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
+
+
+drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5){
+  
+  require(RCy3)
+  # NODE<-nodes(rEG)
+  
+  g <- new ("graphNEL",edgemode="undirected")
+  for(k in 1:length(NODE)){
+    g <- graph::addNode (NODE[k],g)
+  }
+  
+  cw <- CytoscapeWindow ("vignette",graph=g, overwrite=TRUE)
+  displayGraph (cw)
+  
+  possible.layout<-getLayoutNames(cw)
+  layoutNetwork (cw, layout.name= possible.layout[8])
+  
+  g <- cw@graph
+  
+  g <- initNodeAttribute (graph=g, "size", "numeric", 0.0)
+  g <- initNodeAttribute (graph=g, "nes", "numeric", 0.0)
+  
+  for(k in 1:length(NODE)){
+    nodeData (g,NODE[k],"size")<- size[k]
+    nodeData (g,NODE[k],"nes")<- nes[k]
+  }
+  
+  cw <- setGraph (cw, g)
+  displayGraph (cw) 
+  
+  setDefaultNodeShape (cw,"ELLIPSE")
+  setDefaultNodeColor (cw,"#AAFF88")
+  
+  setDefaultNodeSize  (cw, 80)
+  setDefaultNodeFontSize (cw, 10)
+  
+  # getNodeShapes (cw)   # diamond, ellipse, trapezoid, triangle, etc.
+  print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  print (noa (getGraph (cw),"size"))
+  
+  control.point <- c(-2.5,0,2.5)
+  setNodeColorRule (cw, "nes", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
+  
+  setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
+  
+  displayGraph(cw)
+  
+  # setEdgeAttributes (cw, "edgeWidth")
+  setDefaultEdgeLineWidth  (cw, 0.1)
+  setDefaultEdgeColor(cw,"#d3d3d3")
+  #g <- initEdgeAttribute (graph=g,  attribute.name="edgeName",attribute.type="char",default.value="undefined")
+  g <- initEdgeAttribute (graph=g,  attribute.name="edgeWidth",attribute.type="numeric",default.value=0.0)
+  
+  mat <- sim.combine
+  mat[lower.tri(mat, diag = T)] <- NA
+  
+  mat <- mat[NODE,NODE]
+  A <- setNames(melt(mat), c('from', 'to', 'score'))
+  
+  id.na <- which(is.na(A$score))
+  AA <- A[-id.na,]
+  AAA <- AA[which(AA$score !=0),]
+  tab<- AAA[which(AAA$score >= similarity.cutoff),]
+  
+  
+  
+  for(k in 1:nrow(tab)){
+    g <- graph::addEdge (as.character(tab$from[k]), as.character(tab$to[k]),g)
+  }
+  
+  # edgeName <- paste(as.character(tab$from),as.character(tab$to),sep = " (undefined) ")
+  for(k in 1:nrow(tab)){
+    edgeData (g,as.character(tab$from[k]), as.character(tab$to[k]),"edgeWidth") <- tab$score[k]
+  }
+  
+  cw@graph <- g
+  displayGraph (cw)
+  
+  # 
+  # edge.name <- cy2.edge.names (cw@graph)
+  
+  # setEdgeLineWidthRule(cw,"name",edgeName,tab$score)
+  # id<-match(edge.name,edgeName)
+  # duplicated(id)
+  # setEdgeLineWidthDirect(cw,"edgeType",tab$score[1:188])  
+  # 
+  # 
+  # 
+  # print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  # print (noa (getGraph (cw),"size"))
+  # length(cy2.edge.names (cw@graph))
+  # getEdgeAttributeNames(cw)
+  # edgeData(cw@graph)
+  # 
+  
+  
+}

@@ -1,6 +1,6 @@
 library("Rgraphviz")
 #`Unfolded Protein Response (UPR)`
-g<-pathwayGraph(GRAPHITE$REACTOME$`Unfolded Protein Response (UPR)`)
+g<-pathwayGraph(GRAPHITE$REACTOME$Apoptosis)
 
 reference <- read.delim("/gpfs/archive/RED/isjang/Project_CC90009/partialCorrelation_conditioning_CRBN_tumortype.txt",header = F, stringsAsFactors = F)
 
@@ -27,15 +27,16 @@ plot(C,col = COLOR, pch = 19, cex = 3)
 
 attrs <- getDefaultAttrs()
 attrs$node$label <- NODE
-attrs$node$fontsize <- 60
+attrs$node$fontsize <- length(NODE)
 
-attrs$node$height<-0.55
-attrs$node$width<-0.75*1.1
+attrs$node$height<-length(NODE)
+attrs$node$width<-length(NODE)
 
-attrs$graph$size <-c("6,5")
+
 
 attrs$edge$arrowsize <-0.5
 attrs$edge$color <-"grey"
+attrs$edge$minlen <- 0
 
 nAttrs <- list()
 nAttrs$fillcolor <- COLOR
@@ -43,9 +44,9 @@ nAttrs$fillcolor <- COLOR
 
 # layout might be # “dot”, “neato”, “twopi”, “circo”, or “fdp” osage
 
-png("~/compare_upr.png", width = 2400, height = 1200)
+png("~/compare_apoptosis.png", width = 1200, height = 1200)
 set.seed(1)
-plot(g, nodeAttrs = nAttrs,attrs=attrs, "fdp")
+plot(g, nodeAttrs = nAttrs,attrs=attrs, "dot")
 legend("topright",legend = c("Sensitive","Resistant"),bty = "n", pch = 19, cex = 3, col = c(rgb(0,0,1,0.5),rgb(1,0,0,0.5)))
 # legend.col(COLOR,c(-cc, cc))
 dev.off()

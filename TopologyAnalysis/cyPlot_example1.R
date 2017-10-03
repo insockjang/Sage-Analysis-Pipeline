@@ -69,7 +69,7 @@ rm(dataSet,dsAll, i, F1)
 
 # First, we need to transform our network from the igraph to graphnel format
 gD.cyt <- igraph::as_graphnel(gD)
-
+gD.cyt <- g
 # Check if attributes have been passed
 # graph::nodeData(gD.cyt, igraph::V(gD)$name, 'degree')
 # graph::nodeData(gD.cyt, igraph::V(gD)$name, 'betweenness')

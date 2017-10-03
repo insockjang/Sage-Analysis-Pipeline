@@ -1,45 +1,25 @@
-reactomeAnalysis <- function(inputReferenceFile, outputFolder){
-  library(org.Hs.eg.db)
-  library(DOSE)
-  library(ReactomePA)
-  library(clusterProfiler)
-  library(ReactomePA)
-  
-  reference <- read.delim(inputReferenceFile,header = F, stringsAsFactors = F)
-  
-  gL <- reference$V2 - min(reference$V2, na.rm = T)
-  names(gL)<-reference$V1
-  geneList <- gL
-  
-  X <- sort(geneList, decreasing = T, index.return = T)
-  
-  de <- names(X$x)
-  head(de)
-  DE <- bitr(de, fromType = "SYMBOL",toType = "ENTREZID",OrgDb = "org.Hs.eg.db")
-  
-  ## ------------------------------------------------------------------------
-  
-  id <- match(DE$SYMBOL, de)
-  Y<-X$x[id]
-  names(Y)<-DE$ENTREZID
-  
-  y <- gsePathway(Y, nPerm=1000,
-                  minGSSize=30, maxGSSize = 300, pvalueCutoff = 1,
-                  pAdjustMethod="BH", verbose=FALSE)
-  
-  res <- as.data.frame(y)
-  head(res)
-  write.table(res, file = paste0(outputFolder,"/reactomePathway.txt"),quote = F, sep = "\t", col.names = T, row.names = F)
-  ## ----fig.height=16, fig.width=16, eval=FALSE-----------------------------
-  png(paste0(outputFolder, "enrichmentMap.png"),,width = 800, height = 800)
-  enrichMap(y,layout=igraph::layout.auto,vertex.label.cex = 0.75,fig.height = 24, fig.width = 24)
-  dev.off()
-  
-  # ## ----fig.height=7, fig.width=10------------------------------------------
-  # gseaplot(y, geneSetID = "R-HSA-69242")
-  # 
-  # ## ----fig.height=16, fig.width=16, eval=FALSE-----------------------------
-  # viewPathway("G alpha (i) signalling events", readable=TRUE, foldChange=geneList, vertex.label.cex = 0.5)
-  # 
-  
-}
+  NES <- readRDS(file = "/gpfs/archive/RED/isjang/Project_CC90009/pathwayAnalysis_COR_CC90009/NES.rds")
+PVAL <- readRDS(file = "/gpfs/archive/RED/isjang/Project_CC90009/pathwayAnalysis_COR_CC90009/PVAL.rds")
+FDR <- readRDS(file = "/gpfs/archive/RED/isjang/Project_CC90009/pathwayAnalysis_COR_CC90009/FDR.rds")
+
+id0 <- which(apply(FDR,1,function(x){length(which(x<0.05))}) >2)
+id1 <- which(apply(NES,1,function(x){length(which(abs(x)>2))}) !=0)
+
+id <- intersect(id1,id0)
+
+FDR.sign <- sign(NES) * -log10(FDR)
+
+library("RColorBrewer")
+library("gplots")
+
+hmcol = colorpanel(100,"red","black","green")
+kk<-heatmap.2(FDR.sign[id,])
+heatmap.2(FDR.sign[id,kk$colInd], col = hmcol, trace="none", margin=c(15, 35), cexRow = 1, cexCol = 0.75, key = F,Rowv = T, Colv = T, dendrogram = "row", keysize = 0.25)
+
+
+
+id0 <- which(apply(FDR,1,function(x){length(which(x<0.05))}) >2)
+kk<-heatmap.2(FDR.sign[id0,])
+png("~/cor_pathway_heatmat.png",width = 1200, height = 2400)
+heatmap.2(FDR.sign[id0,kk$colInd], col = hmcol, trace="none", margin=c(15, 35), cexRow = 1, cexCol = 0.75, key = F,Rowv = T, Colv = T, dendrogram = "row", keysize = 0.25)
+dev.off()
