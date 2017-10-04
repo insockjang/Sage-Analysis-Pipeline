@@ -9,9 +9,10 @@ load(url(githubURL))
 # drawCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
 
 
-drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5){
+drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5){
   
   require(RCy3)
+  require(reshape2)
   # NODE<-nodes(rEG)
   
   g <- new ("graphNEL",edgemode="undirected")
@@ -22,8 +23,6 @@ drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5)
   cw <- CytoscapeWindow ("vignette",graph=g, overwrite=TRUE)
   displayGraph (cw)
   
-  possible.layout<-getLayoutNames(cw)
-  layoutNetwork (cw, layout.name= possible.layout[8])
   
   g <- cw@graph
   
@@ -84,6 +83,7 @@ drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5)
   }
   
   cw@graph <- g
+  
   displayGraph (cw)
   
   # 
@@ -99,6 +99,78 @@ drawCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5)
   # print (noa.names (getGraph (cw)))  # what data attributes are defined?
   # print (noa (getGraph (cw),"size"))
   # length(cy2.edge.names (cw@graph))
+  # getEdgeAttributeNames(cw)
+  # edgeData(cw@graph)
+  # 
+  
+  return(cw)
+}
+
+
+drawPathwayCytoscape<-function(pathway, reference){
+  
+  require(RCy3)
+  
+  NODE<-nodes(pathway)
+  
+  id<-match(NODE, reference$V1)
+  statistics <- reference$V2[id]
+  
+  
+  pathway <- initEdgeAttribute (pathway, "weight", "numeric", 1)
+  pathway <- initEdgeAttribute (pathway, "edgeType", "char", "undefined")
+  
+  cw <- CytoscapeWindow ("vignette",graph=pathway, overwrite=TRUE)
+  displayGraph (cw)
+  
+  
+  pathway <- cw@graph
+  
+  pathway <- initNodeAttribute (pathway, "stats", "numeric", 0.0)
+  
+  for(k in 1:length(NODE)){
+    nodeData (pathway,NODE[k],"stats")<- statistics[k]
+  }
+  
+  cw <- setGraph (cw, pathway)
+  displayGraph (cw) 
+  
+  setDefaultNodeShape (cw,"ELLIPSE")
+  setDefaultNodeColor (cw,"#AAFF88")
+  
+  setDefaultNodeSize  (cw, 40)
+  setDefaultNodeFontSize (cw, 10)
+  
+  # getNodeShapes (cw)   # diamond, ellipse, trapezoid, triangle, etc.
+  print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  print (noa (getGraph (cw),"stats"))
+  
+  control.point <- c(-1,0,1)
+  setNodeColorRule (cw, "stats", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
+  
+  #setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
+  
+  displayGraph(cw)
+  
+  # setEdgeAttributes (cw, "edgeWidth")
+  setDefaultEdgeLineWidth  (cw, 0.5)
+  setDefaultEdgeColor(cw,"#d3d3d3")
+  
+  
+  # edge.name <- cy2.edge.names (cw@graph)
+  
+  # setEdgeLineWidthRule(cw,"name",edgeName,tab$score)
+  # id<-match(edge.name,edgeName)
+  # duplicated(id)
+  # setEdgeLineWidthDirect(cw,"edgeType",tab$score[1:188])  
+  # 
+  # 
+  # 
+  # print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  # print (noa (getGraph (cw),"size"))
+  # length(cy2.edge.names (cw@graph))
+  # eda.names(pathway)
+  # eda(pathway)
   # getEdgeAttributeNames(cw)
   # edgeData(cw@graph)
   # 
