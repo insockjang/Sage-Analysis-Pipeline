@@ -107,8 +107,12 @@ drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cuto
 }
 
 
-drawPathwayCytoscape<-function(pathway, reference){
+drawPathwayCytoscapeDirection<-function(pathway, reference){
   
+  # pathway should be from adjusted reactome database 
+  # curated by In Sock Jang, edgeType = "directed" or "undirected"
+  # find database in the following folder
+  # /gpfs/archive/RED/isjang/PathwayDB/directReactome.Rdata
   require(RCy3)
   
   NODE<-nodes(pathway)
@@ -145,7 +149,7 @@ drawPathwayCytoscape<-function(pathway, reference){
   print (noa.names (getGraph (cw)))  # what data attributes are defined?
   print (noa (getGraph (cw),"stats"))
   
-  control.point <- c(-1,0,1)
+  control.point <- c(-0.4,0,0.4)
   setNodeColorRule (cw, "stats", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
   
   #setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
@@ -156,6 +160,114 @@ drawPathwayCytoscape<-function(pathway, reference){
   setDefaultEdgeLineWidth  (cw, 0.5)
   setDefaultEdgeColor(cw,"#d3d3d3")
   
+  setDefaultEdgeSourceArrowColor(cw,"#d3d3d3")
+  setDefaultEdgeTargetArrowColor(cw,"#d3d3d3")
+  edgeType.values = names(table(eda(pathway,"edgeType")))
+  
+  line.styles = rep("SOLID",length(edgeType.values))
+  line.styles[grep("undirected",edgeType.values)]<- "LONG_DASH"
+  setEdgeLineStyleRule (cw,"edgeType", edgeType.values, line.styles)
+  
+  
+  arrow.styles = rep("ARROW", length(edgeType.values))
+  arrow.styles[grep("undirected",edgeType.values)]<- "NONE"
+  setEdgeTargetArrowRule (cw,"edgeType",edgeType.values, arrow.styles)
+  
+  # getLineStyles(cw)
+  # getArrowShapes(cw)
+  
+  # edge.name <- cy2.edge.names (cw@graph)
+  
+  # setEdgeLineWidthRule(cw,"name",edgeName,tab$score)
+  # id<-match(edge.name,edgeName)
+  # duplicated(id)
+  # setEdgeLineWidthDirect(cw,"edgeType",tab$score[1:188])  
+  # 
+  # 
+  # 
+  # print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  # print (noa (getGraph (cw),"size"))
+  # length(cy2.edge.names (cw@graph))
+  # eda.names(pathway)
+  # eda(pathway)
+  # getEdgeAttributeNames(cw)
+  # edgeData(cw@graph)
+  # 
+  
+  return(cw)
+}
+
+
+
+
+drawPathwayCytoscapeAdvance<-function(pathway, reference){
+  
+  # pathway should be from adjusted reactome database in advanced way : ACTIVATION and INHIBITION on directed edges
+  # curated by In Sock Jang, edgeType = "directed" or "undirected"
+  # find database in the following folder
+  # /gpfs/archive/RED/isjang/PathwayDB/directAdvancedReactome.Rdata
+  require(RCy3)
+  
+  NODE<-nodes(pathway)
+  
+  id<-match(NODE, reference$V1)
+  statistics <- reference$V2[id]
+  
+  
+  pathway <- initEdgeAttribute (pathway, "weight", "numeric", 1)
+  pathway <- initEdgeAttribute (pathway, "edgeType", "char", "undefined")
+  
+  cw <- CytoscapeWindow ("vignette",graph=pathway, overwrite=TRUE)
+  displayGraph (cw)
+  
+  
+  pathway <- cw@graph
+  
+  pathway <- initNodeAttribute (pathway, "stats", "numeric", 0.0)
+  
+  for(k in 1:length(NODE)){
+    nodeData (pathway,NODE[k],"stats")<- statistics[k]
+  }
+  
+  cw <- setGraph (cw, pathway)
+  displayGraph (cw) 
+  
+  setDefaultNodeShape (cw,"ELLIPSE")
+  setDefaultNodeColor (cw,"#AAFF88")
+  
+  setDefaultNodeSize  (cw, 40)
+  setDefaultNodeFontSize (cw, 10)
+  
+  # getNodeShapes (cw)   # diamond, ellipse, trapezoid, triangle, etc.
+  print (noa.names (getGraph (cw)))  # what data attributes are defined?
+  print (noa (getGraph (cw),"stats"))
+  
+  control.point <- c(-0.4,0,0.4)
+  setNodeColorRule (cw, "stats", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
+  
+  #setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
+  
+  displayGraph(cw)
+  
+  # setEdgeAttributes (cw, "edgeWidth")
+  setDefaultEdgeLineWidth  (cw, 0.5)
+  setDefaultEdgeColor(cw,"#d3d3d3")
+  
+  setDefaultEdgeSourceArrowColor(cw,"#d3d3d3")
+  setDefaultEdgeTargetArrowColor(cw,"#d3d3d3")
+  edgeType.values = names(table(eda(pathway,"edgeType")))
+  
+  line.styles = rep("SOLID",length(edgeType.values))
+  line.styles[grep("undirected",edgeType.values)]<- "LONG_DASH"
+  setEdgeLineStyleRule (cw,"edgeType", edgeType.values, line.styles)
+  
+  
+  arrow.styles = rep("ARROW", length(edgeType.values))
+  arrow.styles[grep("undirected",edgeType.values)]<- "NONE"
+  setEdgeTargetArrowRule (cw,"edgeType",edgeType.values, arrow.styles)
+  
+  # getLineStyles(cw)
+  # getArrowShapes(cw)
   
   # edge.name <- cy2.edge.names (cw@graph)
   
