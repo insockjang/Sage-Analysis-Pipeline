@@ -26,27 +26,10 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/MSigDBv6.Rdata"
     load(url(githubURL))
     
-    if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- MSigDB$C2.CP.BIOCARTA$genesets
-    }
-    if(is.element(pathwayName,"KEGG")){
-      allPathways <- MSigDB$C2.CP.KEGG$genesets
-    }
-    if(is.element(pathwayName,"REACTOME")){
-      allPathways <- MSigDB$C2.CP.REACTOME$genesets
-    }
-    if(is.element(pathwayName,"GO_BP")){
-      allPathways <- MSigDB$C5.BP$genesets
-    }
-    if(is.element(pathwayName,"GO_CC")){
-      allPathways <- MSigDB$C5.CC$genesets
-    }
-    if(is.element(pathwayName,"GO_MF")){
-      allPathways <- MSigDB$C5.MF$genesets
-    }
-    if(is.element(pathwayName,"HALLMARK")){
-      allPathways <- MSigDB$H.ALL$genesets
-    }
+    print(names(MSigDB))
+    
+    allPathways <- MSigDB[[pathwayName]]$genesets
+    
   }
   if(toupper(synID) == "GRAPHITE"){
     
@@ -63,24 +46,10 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/Graphite.Rdata"
     load(url(githubURL))
     
-    if(is.element(pathwayName,"BIOCARTA")){
-      allPathways <- curateDB(GRAPHITE$BIOCARTA@entries)
-    }
-    if(is.element(pathwayName,"KEGG")){
-      allPathways <- curateDB(GRAPHITE$KEGG@entries)
-    }
-    if(is.element(pathwayName,"REACTOME")){
-      allPathways <- curateDB(GRAPHITE$REACTOME@entries)
-    }
-    if(is.element(pathwayName,"NCI")){
-      allPathways <- curateDB(GRAPHITE$NCI@entries)
-    }
-    if(is.element(pathwayName,"HUMANCYC")){
-      allPathways <- curateDB(GRAPHITE$HUMANCYC@entries)
-    }
-    if(is.element(pathwayName,"PANTHER")){
-      allPathways <- curateDB(GRAPHITE$PANTHER@entries)
-    }
+    print(names(GRAPHITE))
+    
+    allPathways <- curateDB(GRAPHITE[[pathwayName]]@entries)
+    
   }
     
   # FET test
