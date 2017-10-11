@@ -16,6 +16,6 @@ load("/gpfs/archive/RED/isjang/Project_CC90009/SolidTumor/PCOR/pcor_wholeSolidTu
 myReference <- data.frame(V1 = names(pcor.crbn), V2 = pcor.crbn)
 
 CW <- drawPathwayCytoscapeAdvance(pathway, myReference)
-layoutNetwork(CW, "cose")
+
 # After you manually modify your layout, you can directly save it into png format
 saveImage(CW, "UPR_pcor", 'png', 6400)

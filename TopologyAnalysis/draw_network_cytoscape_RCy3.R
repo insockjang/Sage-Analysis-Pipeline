@@ -102,7 +102,7 @@ drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cuto
   # getEdgeAttributeNames(cw)
   # edgeData(cw@graph)
   # 
-  
+  layoutNetwork(cw, "cose")
   return(cw)
 }
 
@@ -193,7 +193,7 @@ drawPathwayCytoscapeDirection<-function(pathway, reference){
   # getEdgeAttributeNames(cw)
   # edgeData(cw@graph)
   # 
-  
+  layoutNetwork(cw, "cose")
   return(cw)
 }
 
@@ -286,7 +286,7 @@ drawPathwayCytoscapeAdvance<-function(pathway, reference){
   # getEdgeAttributeNames(cw)
   # edgeData(cw@graph)
   # 
-  
+  layoutNetwork(cw, "cose")
   return(cw)
 }
 
