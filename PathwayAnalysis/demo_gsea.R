@@ -7,7 +7,11 @@ load("/gpfs/archive/RED/isjang/Project_CC90009/SolidTumor/PCOR/pcor_wholeSolidTu
 myReference <- pcor.crbn
 
 # if you installed already doParallel package, it will be okay to run with multicore running
+# Using graphite DB for reactome analysis
 results.gsea.REACTOME <-pathwayAnalysis(synID="GRAPHITE",pathwayName = "REACTOME",Reference = myReference,Test.method = "GSEA",cores = 4)
+
+# Using MSigDB v6 for Hallmark of Cancer DB analysis
+results.gsea.HallmarkCancer <-pathwayAnalysis(synID="MSigDB",pathwayName = "H.ALL",Reference = myReference,Test.method = "GSEA",cores = 4)
 
 # how to plot individual GSEA plot
 # select your specified pathway name, e.g. "Unfolded Protein Response (UPR)"

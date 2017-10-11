@@ -291,33 +291,37 @@ drawPathwayCytoscapeAdvance<-function(pathway, reference){
 }
 
 
-drawAdjMatCytoscapeDirection<-function(mat, weight.cutoff = 0.5){
+drawNetworkPropagationCytoscape<-function(mat, seeds, weight.cutoff = 0.5){
+  # input:
+  #       mat : adjacent matrix pruned by network propagation 
+  #       seed : basic given seeds for network propagation such as "CRBN", "GSPT1", "IKZF1", "IKZF3", etc
+  # copyrighted by In Sock Jang (isjang@celgene.com)
   
-  source("~/Code/utility.R")
-  # pathway should be from adjusted reactome database 
-  # curated by In Sock Jang, edgeType = "directed" or "undirected"
-  # find database in the following folder
-  # /gpfs/archive/RED/isjang/PathwayDB/directReactome.Rdata
   require(RCy3)
   require(reshape2)
   
+  id <- match(seeds, rownames(mat))
+  if(any(is.na(id))){
+    error("Please check if your given seeds are subset of PPI for topology drawing")
+    break;
+  }
+  
   # normalize
   temp.mat <- mat/1000
-  NODE <- union(rownames(temp.mat),colnames(temp.mat))
-  
-  g <- new ("graphNEL",edgemode="undirected")
-  for(k in 1:length(NODE)){
-    g <- graph::addNode (NODE[k],g)
-  }
   
   temp.mat[lower.tri(temp.mat, diag = T)] <- NA
   
   A <- setNames(melt(temp.mat), c('from', 'to', 'score'))
   
-  id.na <- which(is.na(A$score))
-  AA <- A[-id.na,]
-  AAA <- AA[which(AA$score !=0),]
-  tab<- AAA[which(AAA$score >= weight.cutoff),]
+  id.remove <- which(is.na(A$score) | A$score < weight.cutoff)
+  tab<- A[-id.remove,]
+  
+  NODE <- union(tab$from, tab$to)
+  
+  g <- new ("graphNEL",edgemode="undirected")
+  for(k in 1:length(NODE)){
+    g <- graph::addNode (NODE[k],g)
+  }
   
   
   for(k in 1:nrow(tab)){
@@ -328,24 +332,21 @@ drawAdjMatCytoscapeDirection<-function(mat, weight.cutoff = 0.5){
   
   displayGraph (cw)
   
-  g<-cw@graph
+  g <- cw@graph
   g <- initEdgeAttribute (graph=g,  attribute.name="edgeWidth",attribute.type="numeric",default.value=0.0)
+  g <- initEdgeAttribute (g,  "edgeType",attribute.type="char","undefined")
   for(k in 1:nrow(tab)){
     edgeData (g,as.character(tab$from[k]), as.character(tab$to[k]),"edgeWidth") <- tab$score[k]
   }
   
+  g <- initNodeAttribute (g, "seeds", "char", "neighbor")
   
-  # pathway <- cw@graph
-  # 
-  # pathway <- initNodeAttribute (pathway, "stats", "numeric", 0.0)
-  # 
-  # for(k in 1:length(NODE)){
-  #   nodeData (pathway,NODE[k],"stats")<- statistics[k]
-  # }
-  # 
+  id1 <- match(seeds,NODE)
+  nodeData (g,NODE[id1[!is.na(id1)]],"seeds")<- "seed"
+  
   cw <- setGraph (cw, g)
-  # displayGraph (cw) 
-  # 
+  displayGraph (cw) 
+   
   setDefaultNodeShape (cw,"ELLIPSE")
   setDefaultNodeColor (cw,"#AAFF88")
   
@@ -354,47 +355,23 @@ drawAdjMatCytoscapeDirection<-function(mat, weight.cutoff = 0.5){
   
   # getNodeShapes (cw)   # diamond, ellipse, trapezoid, triangle, etc.
   # print (noa.names (getGraph (cw)))  # what data attributes are defined?
-  # print (noa (getGraph (cw),"stats"))
+  # print (noa (getGraph (cw),"seeds"))
   
-  # control.point <- c(-0.4,0,0.4)
-  # setNodeColorRule (cw, "stats", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
+  data.values <- c("seed", "neighbor")
+  node.colors <- c("#FFA500", "#7FFF00") 
+  setNodeColorRule (cw, node.attribute.name="seeds", data.values, node.colors, mode='lookup', default.color='#AAFF88')
   
-  #setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
+  shapes <- c("ROUND_RECTANGLE", "ELLIPSE")
+  setNodeShapeRule (cw, node.attribute.name="seeds", data.values, shapes)
   
-  # displayGraph(cw)
-  
+  arrows <- c("NONE")
+  edgeType.values <- c("undefined")
+  setEdgeTargetArrowRule (cw, 'edgeType', edgeType.values, arrows)
   
   setDefaultEdgeLineWidth  (cw, 0.5)
   setDefaultEdgeColor(cw,"#d3d3d3")
   
   displayGraph(cw)
-  # setDefaultEdgeSourceArrowColor(cw,"#d3d3d3")
-  # setDefaultEdgeTargetArrowColor(cw,"#d3d3d3")
-  # edgeType.values = names(table(eda(pathway,"edgeType")))
-  
-  # line.styles = rep("SOLID",length(edgeType.values))
-  # line.styles[grep("undirected",edgeType.values)]<- "LONG_DASH"
-  # setEdgeLineStyleRule (cw,"edgeType", edgeType.values, line.styles)
-  
-  
-  # arrow.styles = rep("ARROW", length(edgeType.values))
-  # arrow.styles[grep("undirected",edgeType.values)]<- "NONE"
-  # setEdgeTargetArrowRule (cw,"edgeType",edgeType.values, arrow.styles)
-  
-  # getLineStyles(cw)
-  # getArrowShapes(cw)
-  
-  edgeName <- cy2.edge.names (cw@graph)
-  setEdgeLineWidthRule(cw,"edgeWidth",tab$score)
-  # id<-match(edge.name,edgeName)
-  # duplicated(id)
-  
-  length(cy2.edge.names (cw@graph))
-  eda.names(g)
-  eda(g,edge.attribute.name = "edgeWidth")
-  getEdgeAttributeNames(cw)
-  edgeData(cw@graph)
-
-  
+  layoutNetwork(cw, "cose")
   return(cw)
 }
