@@ -117,8 +117,8 @@ drawPathwayCytoscapeDirection<-function(pathway, reference){
   
   NODE<-nodes(pathway)
   
-  id<-match(NODE, reference$V1)
-  statistics <- reference$V2[id]
+  id<-match(NODE, names(reference))
+  statistics <- reference[id]
   
   
   pathway <- initEdgeAttribute (pathway, "weight", "numeric", 1)
@@ -210,8 +210,8 @@ drawPathwayCytoscapeAdvance<-function(pathway, reference){
   
   NODE<-nodes(pathway)
   
-  id<-match(NODE, reference$V1)
-  statistics <- reference$V2[id]
+  id<-match(NODE, names(reference))
+  statistics <- reference[id]
   
   
   pathway <- initEdgeAttribute (pathway, "weight", "numeric", 1)
