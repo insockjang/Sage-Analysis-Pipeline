@@ -3,13 +3,11 @@ githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipelin
 load(url(githubURL))
 
 
-# NODE <- reactome geneset names 
-# size <- reactome geneset size 
-# nes <- reactome geneset's gsea significance score 
-# drawCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
-
-
-drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cutoff = 0.5){
+drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,stats,similarity.cutoff = 0.5){
+  # NODE <- reactome geneset names 
+  # size <- reactome geneset size 
+  # stats <- reactome geneset's gsea significance score : -log10(fdr) * sign(nes)
+  # drawEnrichMapCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
   
   require(RCy3)
   require(reshape2)
@@ -27,11 +25,11 @@ drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cuto
   g <- cw@graph
   
   g <- initNodeAttribute (graph=g, "size", "numeric", 0.0)
-  g <- initNodeAttribute (graph=g, "nes", "numeric", 0.0)
+  g <- initNodeAttribute (graph=g, "stats", "numeric", 0.0)
   
   for(k in 1:length(NODE)){
     nodeData (g,NODE[k],"size")<- size[k]
-    nodeData (g,NODE[k],"nes")<- nes[k]
+    nodeData (g,NODE[k],"stats")<- stats[k]
   }
   
   cw <- setGraph (cw, g)
@@ -47,8 +45,8 @@ drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,nes,similarity.cuto
   print (noa.names (getGraph (cw)))  # what data attributes are defined?
   print (noa (getGraph (cw),"size"))
   
-  control.point <- c(-2.5,0,2.5)
-  setNodeColorRule (cw, "nes", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
+  control.point <- c(-4,0,4)
+  setNodeColorRule (cw, "stats", control.point,c ("#0000FF","#FFFFFF","#FF0000"),mode="interpolate")
   
   setNodeSizeRule (cw, 'label', NODE,  log2(size) ^1.75, default.size= 10, mode='lookup')
   
