@@ -12,7 +12,7 @@ reference <- gseaOutcome[id,]
 
 # Run Cytoscape (>3.0) apps in your background
 # Once you already setup to link Cytoscape, you will get "vignette" network
-CW <- drawEnrichMapCytoscape(mat = sim.combine,NODE = reference$geneset,size = reference$No_genes,nes = reference$nes,similarity.cutoff = 0.3)
+CW <- drawEnrichMapCytoscape(mat = sim.combine,NODE = reference$geneset,size = reference$No_genes,stats = -log10(reference$fdr) * sign(reference$nes),similarity.cutoff = 0.3)
 
 # After you manually modify your layout, you can directly save it into png format
 saveImage(CW, "EnrichmentMap_wholeSamples", 'png', 6400)
