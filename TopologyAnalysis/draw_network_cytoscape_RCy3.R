@@ -1,18 +1,18 @@
-require(devtools)
-githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/Graphite_reactome_similarity.Rdata"
-load(url(githubURL))
-sim.combine.graphite <- sim.combine
-
-githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/MSigDB_C2.CP_similarity.Rdata"
-load(url(githubURL))
-sim.combine.msigdb <- sim.combine
-
-
-drawEnrichMapCytoscape<-function(mat,NODE,size,stats,similarity.cutoff = 0.5){
+drawEnrichMapCytoscape<-function(DB,subDB,NODE,size,stats,similarity.cutoff = 0.5){
   # NODE <- reactome geneset names 
   # size <- reactome geneset size 
   # stats <- reactome geneset's gsea significance score : -log10(fdr) * sign(nes)
   # drawEnrichMapCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
+  args = commandArgs(trailingOnly = TRUE)
+  if(toupper(args[1]) == "GRAPHITE"){
+    githubURL <- paste0("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/graphite.",toupper(subDB),"_similarity.Rdata")
+    load(url(githubURL))
+  }
+  
+  if(toupper(args[1]) == "MSIGDB"){
+    githubURL <- paste0("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/msigdb.",toupper(subDB),".ALL_similarity.Rdata")
+    load(url(githubURL))
+  }
   
   require(RCy3)
   require(reshape2)
