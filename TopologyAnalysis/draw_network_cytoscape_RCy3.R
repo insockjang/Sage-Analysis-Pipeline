@@ -3,13 +3,13 @@ drawEnrichMapCytoscape<-function(DB,subDB,NODE,size,stats,similarity.cutoff = 0.
   # size <- reactome geneset size 
   # stats <- reactome geneset's gsea significance score : -log10(fdr) * sign(nes)
   # drawEnrichMapCytoscape(mat,NODE,size,nes, similarity.cutoff = 0.5)
-  args = commandArgs(trailingOnly = TRUE)
-  if(toupper(args[1]) == "GRAPHITE"){
+  
+  if(toupper(DB) == "GRAPHITE"){
     githubURL <- paste0("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/graphite.",toupper(subDB),"_similarity.Rdata")
     load(url(githubURL))
   }
   
-  if(toupper(args[1]) == "MSIGDB"){
+  if(toupper(DB) == "MSIGDB"){
     githubURL <- paste0("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/msigdb.",toupper(subDB),".ALL_similarity.Rdata")
     load(url(githubURL))
   }
