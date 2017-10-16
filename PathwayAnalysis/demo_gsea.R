@@ -16,7 +16,9 @@ results.gsea.HallmarkCancer <-pathwayAnalysis(synID="MSigDB",pathwayName = "H.AL
 # how to plot individual GSEA plot
 # select your specified pathway name, e.g. "Unfolded Protein Response (UPR)"
 # Don't forget you have to have "myReference" to draw GSEA plot!!!!
+# if you write main title on it, just use "title" function: Yes, that's it.
 results.gsea.REACTOME[["Unfolded Protein Response (UPR)"]]$gseaPlot(myReference,results.gsea.REACTOME[["Unfolded Protein Response (UPR)"]]$gseaResult$geneset)
+title("Unfolded Protein Response (UPR)")
 
 
 # basic function to summarize all GSEA results into one table
