@@ -24,7 +24,7 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       
                                       .self$fetResult<-fisher.test(Mat2x2)                               
                                     },
-                                    gseaPlot = function(reference,geneSet,main = MAIN,...){
+                                    gseaPlot = function(reference,geneSet,...){
                                       reference1 <- sort(reference,decreasing = TRUE, index.return = TRUE)
                                       reference <- reference1$x
                                       geneset <- intersect(geneSet, names(reference))                                      
@@ -100,9 +100,6 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       lines(ind, Obs.correl.vector.norm, type = "l", lwd = 1, cex = 1, col = 1)
                                       lines(c(1, N), c(zero.corr.line, zero.corr.line), lwd = 1, lty = 1, cex = 1, col = 1) # zero correlation horizontal line
                                       
-                                      if(exists(args[3])){
-                                        title(MAIN)
-                                      }
                                     }
                                     
                                     
