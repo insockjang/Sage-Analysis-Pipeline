@@ -89,40 +89,39 @@ drawEnrichMapCytoscape<-function(DB,subDB,NODE,size,stats,similarity.cutoff = 0.
   
   displayGraph (cw)
   
-  # 
-  # edge.name <- cy2.edge.names (cw@graph)
-  
-  # setEdgeLineWidthRule(cw,"name",edgeName,tab$score)
-  # id<-match(edge.name,edgeName)
-  # duplicated(id)
-  # setEdgeLineWidthDirect(cw,"edgeType",tab$score[1:188])  
-  # 
-  # 
-  # 
-  # print (noa.names (getGraph (cw)))  # what data attributes are defined?
-  # print (noa (getGraph (cw),"size"))
-  # length(cy2.edge.names (cw@graph))
-  # getEdgeAttributeNames(cw)
-  # edgeData(cw@graph)
-  # 
   layoutNetwork(cw, "cose")
   return(cw)
 }
 
 
-drawPathwayCytoscapeDirection<-function(pathway, reference){
+drawPathwayCytoscapeMSigDB <- function(pathway.msigdb, reference){
   
-  # pathway should be from adjusted reactome database 
+  # pathway should be from MSigDB reactome database 
   # curated by In Sock Jang, edgeType = "directed" or "undirected"
-  # find database in the following folder
-  # /gpfs/archive/RED/isjang/PathwayDB/directReactome.Rdata
+  # find mapping database in the following
+  
+  
+  githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/MSigDB_GRAPHITE.reactome_mapping.txt"
+  mapTable <- read.delim(url(githubURL), header = F, stringsAsFactors = F)
+  id <- which(mapTable$V1 %in% pathway.msigdb)
+  
+  githubURL1 <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/Graphite.Rdata"
+  load(url(githubURL1))
+  pathway <- pathwayGraph(GRAPHITE$REACTOME[[mapTable$V2[id]]])
+  
+  # artificially generate reference from MSigDB
+  reference <- runif(70)
+  names(reference)<-MSigDB$C2.CP.REACTOME$genesets[["REACTOME_IMMUNOREGULATORY_INTERACTIONS_BETWEEN_A_LYMPHOID_AND_A_NON_LYMPHOID_CELL"]]
+  
+  
   require(RCy3)
   
   NODE<-nodes(pathway)
   
-  id<-match(NODE, names(reference))
-  statistics <- reference[id]
-  
+  id<-match(names(reference), NODE)
+  statistics <- rep(0, length(NODE))
+  names(statistics) <- NODE
+  statistics[id[which(!is.na(id))]] <- reference[which(!is.na(id))]
   
   pathway <- initEdgeAttribute (pathway, "weight", "numeric", 1)
   pathway <- initEdgeAttribute (pathway, "edgeType", "char", "undefined")
@@ -147,6 +146,9 @@ drawPathwayCytoscapeDirection<-function(pathway, reference){
   
   setDefaultNodeSize  (cw, 40)
   setDefaultNodeFontSize (cw, 10)
+  
+  setDefaultNodeBorderWidth (cw, 1)
+  setDefaultNodeBorderColor (cw, "#C0C0C0") # white borders
   
   # getNodeShapes (cw)   # diamond, ellipse, trapezoid, triangle, etc.
   print (noa.names (getGraph (cw)))  # what data attributes are defined?
@@ -175,27 +177,9 @@ drawPathwayCytoscapeDirection<-function(pathway, reference){
   arrow.styles = rep("ARROW", length(edgeType.values))
   arrow.styles[grep("undirected",edgeType.values)]<- "NONE"
   setEdgeTargetArrowRule (cw,"edgeType",edgeType.values, arrow.styles)
+  # setEdgeSourceArrowRule (cw,"edgeType",edgeType.values, arrow.styles)
   
-  # getLineStyles(cw)
-  # getArrowShapes(cw)
   
-  # edge.name <- cy2.edge.names (cw@graph)
-  
-  # setEdgeLineWidthRule(cw,"name",edgeName,tab$score)
-  # id<-match(edge.name,edgeName)
-  # duplicated(id)
-  # setEdgeLineWidthDirect(cw,"edgeType",tab$score[1:188])  
-  # 
-  # 
-  # 
-  # print (noa.names (getGraph (cw)))  # what data attributes are defined?
-  # print (noa (getGraph (cw),"size"))
-  # length(cy2.edge.names (cw@graph))
-  # eda.names(pathway)
-  # eda(pathway)
-  # getEdgeAttributeNames(cw)
-  # edgeData(cw@graph)
-  # 
   layoutNetwork(cw, "cose")
   return(cw)
 }
