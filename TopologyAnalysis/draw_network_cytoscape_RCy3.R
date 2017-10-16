@@ -1,9 +1,14 @@
 require(devtools)
-githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/reactome_similarity.Rdata"
+githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/Graphite_reactome_similarity.Rdata"
 load(url(githubURL))
+sim.combine.graphite <- sim.combine
+
+githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/MSigDB_reactome_similarity.Rdata"
+load(url(githubURL))
+sim.combine.msigdb <- sim.combine
 
 
-drawEnrichMapCytoscape<-function(mat = sim.combine,NODE,size,stats,similarity.cutoff = 0.5){
+drawEnrichMapCytoscape<-function(mat,NODE,size,stats,similarity.cutoff = 0.5){
   # NODE <- reactome geneset names 
   # size <- reactome geneset size 
   # stats <- reactome geneset's gsea significance score : -log10(fdr) * sign(nes)
