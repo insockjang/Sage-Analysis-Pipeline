@@ -3,7 +3,7 @@ githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipelin
 load(url(githubURL))
 sim.combine.graphite <- sim.combine
 
-githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/MSigDB_reactome_similarity.Rdata"
+githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/MSigDB_C2.CP_similarity.Rdata"
 load(url(githubURL))
 sim.combine.msigdb <- sim.combine
 
