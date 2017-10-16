@@ -109,10 +109,6 @@ drawPathwayCytoscapeMSigDB <- function(pathway.msigdb, reference){
   load(url(githubURL1))
   pathway <- pathwayGraph(GRAPHITE$REACTOME[[mapTable$V2[id]]])
   
-  # artificially generate reference from MSigDB
-  reference <- runif(70)
-  names(reference)<-MSigDB$C2.CP.REACTOME$genesets[["REACTOME_IMMUNOREGULATORY_INTERACTIONS_BETWEEN_A_LYMPHOID_AND_A_NON_LYMPHOID_CELL"]]
-  
   
   require(RCy3)
   
