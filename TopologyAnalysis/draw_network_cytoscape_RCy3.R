@@ -274,23 +274,30 @@ drawPathwayCytoscapeAdvance<-function(pathway, reference){
 }
 
 
-drawNetworkPropagationCytoscape<-function(mat, seeds, weight.cutoff = 0.5){
+drawCytoscapeNetworkPropagation<-function(mat, F.tab, cutoff.npzscore, weight.cutoff = 0.5){
   # input:
   #       mat : adjacent matrix pruned by network propagation 
   #       seed : basic given seeds for network propagation such as "CRBN", "GSPT1", "IKZF1", "IKZF3", etc
   # copyrighted by In Sock Jang (isjang@celgene.com)
   
-  require(RCy3)
-  require(reshape2)
-  
-  id <- match(seeds, rownames(mat))
-  if(any(is.na(id))){
-    error("Please check if your given seeds are subset of PPI for topology drawing")
+  # F.tab has to have f.final, f.init, zscore columns : data frame or matrix class
+  if(nrow(F.tab) != nrow(mat)){
+    error("Please check if your network propagation adjacent matrix size is equal to the outcome table")
     break;
   }
   
+  seeds <- colnames(mat)[which(F.tab$f.init == 1)]
+  
+  adds <- setdiff(colnames(mat)[which(F.tab$zscore > cutoff.npzscore)],seeds)
+  
+  allnodes <- union(seeds, adds)
+  
+  require(RCy3)
+  require(reshape2)
+  
   # normalize
-  temp.mat <- mat/1000
+  temp.mat <- mat[allnodes,allnodes]/1000
+  
   
   temp.mat[lower.tri(temp.mat, diag = T)] <- NA
   
