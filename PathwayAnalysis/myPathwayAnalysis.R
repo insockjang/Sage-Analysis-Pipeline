@@ -15,7 +15,7 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                     },
                                     
                                     fet = function(AllGenes,geneSet,testSet){ 
-                                      #AllGenes = union(allGenes,union(geneSet,testSet))
+                                      AllGenes = union(AllGenes,union(geneSet,testSet))
                                       Mat2x2 <- mat.or.vec(2,2)
                                       Mat2x2[1,1] <- length(intersect(testSet,geneSet))
                                       Mat2x2[2,1] <- length(setdiff(testSet,geneSet))
