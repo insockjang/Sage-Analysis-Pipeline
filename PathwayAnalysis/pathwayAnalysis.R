@@ -64,12 +64,11 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     
   # FET test
   if(is.element(Test.method,"FET")){
-    allGenes <-c()
-    for (i in 1:length(allPathways)){
-      allGenes<-union(allGenes,allPathways[[i]])
-    }      
-    testSet = Reference
-    AllGenes<-union(testSet,allGenes)
+    allGenes <- unique(unlist(allPathways))
+    
+    testSet <- Reference
+    
+    AllGenes <- union(testSet,allGenes)
     
     pathwayTest <-function(x){    
       curPathwayGenes <- allPathways[[x]]        
