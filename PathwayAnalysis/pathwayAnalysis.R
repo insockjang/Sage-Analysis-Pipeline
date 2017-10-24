@@ -31,6 +31,16 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     allPathways <- MSigDB[[pathwayName]]$genesets
     
   }
+  
+  if(toupper(synID) == "CPDB"){
+    
+    githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/CPDB.Rdata"
+    load(url(githubURL))
+    
+    print(names(CPDB))
+    
+    allPathways <- CPDB[[pathwayName]]
+  }
   if(toupper(synID) == "GRAPHITE"){
     
     curateDB <- function(DB){
