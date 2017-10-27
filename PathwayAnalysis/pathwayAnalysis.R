@@ -7,7 +7,7 @@ source_url("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/
 pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.method = c("FET","GSEA"),cores = 1){
   
   if(is.null(synID)==1){
-    error("Please select which database you would like to use in your analysis: MSigDB(syn1681370) or Graphite(syn2135025)")
+    error("Please select which database you would like to use in your analysis: MSigDB, CPDB or Graphite")
     break;
   }
   if(is.null(pathwayName)==1){
@@ -38,6 +38,8 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     load(url(githubURL))
     
     print(names(CPDB))
+    
+    names(CPDB) <- toupper(names(CPDB))
     
     allPathways <- CPDB[[pathwayName]]
   }
