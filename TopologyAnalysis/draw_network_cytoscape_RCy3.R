@@ -14,6 +14,11 @@ drawEnrichMapCytoscape<-function(DB,subDB,NODE,size,stats,similarity.cutoff = 0.
     load(url(githubURL))
   }
   
+  if(toupper(DB) == "CPDB"){
+    githubURL <- paste0("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/TopologyAnalysis/cpdb_similarity.Rdata")
+    load(url(githubURL))
+  }
+  
   require(RCy3)
   require(reshape2)
   # NODE<-nodes(rEG)
