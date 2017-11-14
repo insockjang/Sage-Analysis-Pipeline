@@ -23,7 +23,7 @@ myPathwayAnalysis <- setRefClass(Class = "myPathwayAnalysis",
                                       Mat2x2[2,2] <- length(AllGenes) - Mat2x2[1,1]- Mat2x2[1,2]- Mat2x2[2,1]
                                       
                                       fisher.result <- fisher.test(Mat2x2, alternative = "greater")   
-                                      .self$fetResult <- list(pval = fisher.result$p.value,stats = fisher.result$estimate, mat = Mat2x2, geneSet = intersect(testSet,geneSet))
+                                      .self$fetResult <- list(p.value = fisher.result$p.value,stats = fisher.result$estimate, mat = Mat2x2, fetGeneSet = intersect(testSet,geneSet))
                                     },
                                     gseaPlot = function(reference,geneSet,...){
                                       reference1 <- sort(reference,decreasing = TRUE, index.return = TRUE)
