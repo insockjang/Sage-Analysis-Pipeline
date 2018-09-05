@@ -45,14 +45,6 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   }
   if(toupper(synID) == "GRAPHITE"){
     
-    curateDB <- function(DB){
-      db <- vector("list",length(DB))
-      for(k in 1:length(DB)){
-        db[[k]]<-nodes(DB[[k]])
-      }
-      names(db) <- names(DB)
-      return(db)
-    }
     
     
     githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/Graphite.Rdata"
@@ -60,7 +52,7 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
     
     print(names(GRAPHITE))
     
-    allPathways <- curateDB(GRAPHITE[[pathwayName]]@entries)
+    allPathways <- GRAPHITE[[pathwayName]]
     
   }
     
