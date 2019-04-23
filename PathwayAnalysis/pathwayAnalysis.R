@@ -59,8 +59,11 @@ pathwayAnalysis<-function(synID=NULL,pathwayName = NULL,Reference = NULL,Test.me
   # FET test
   if(is.element(Test.method,"FET")){
     
-    githubURL <- "https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/gene_protein_coding.rds"
-    allGenes <- readRDS(url(githubURL))
+    
+    githubURL <- ("https://raw.githubusercontent.com/insockjang/Sage-Analysis-Pipeline/master/PathwayAnalysis/gene_protein_coding.rds")
+    download.file(githubURL,"gene_protein_coding.rds", method="curl")
+    allGenes <- readRDS("gene_protein_coding.rds")
+    
     
     testSet <- Reference
     
